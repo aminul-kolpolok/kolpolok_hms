@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="patient_list_view">
+        <field name="name">Patient.list.view</field>
+        <field name="model">patient.info</field>
+        <field name="arch" type="xml">
+            <tree decoration-success="state=='created'" decoration-danger="state=='cancelled'">
+                <field name="patient_id"/>
+                <field name="name"/>
+                <field name="age_manual"/>
+                <field name="mobile" widget="phone"/>
+                <field name="gender"/>
+                <field name="address"/>
+                <field name="create_date"/>
+                <field name="email" widget="email"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="patient_form_view">
+        <field name="name">Patient.form.view</field>
+        <field name="model">patient.info</field>
+        <field name="arch" type="xml">
+            <form string="tree_string" widget="mail_thread">
+                <header>
+                    <button string="Confirm and Print" type="object" name="action_confirm" class="btn btn-success"/>
+                        <button string="Cancel" type="object" name="action_cancel" class="btn btn-danger"/>
+                    <button string="Send by Email" name="button_patient_card_send_by_email" type="object"
+                            class="oe_highlight"/>
+                     <field name="state" widget="statusbar"/>
+                </header>
+
+                <sheet>
+<!--                    <xpath expr="//sheet/group" position="after">-->
+<!--                        <div class="oe_button_box" name="button_box">-->
+<!--                            <button type="object" name="count_appointment" class="oe_stat_button" icon="fa-pagelines">-->
+<!--                                <field name="appointment_count" widget="statinfo"/>-->
+<!--                            </button>-->
+<!--                            <button type="object" name="count_admission" class="oe_stat_button" icon="fa-pagelines">-->
+<!--                                <field name="admission_count" widget="statinfo"/>-->
+<!--                            </button>-->
+<!--                            <button class="oe_stat_button" type="object" name="count_bills" icon="fa-list-alt">-->
+<!--                                <field name="bill_count" widget="statinfo"/>-->
+<!--                            </button>-->
+<!--                            <button class="oe_stat_button" type="object" name="btn_view_medicine" icon="fa-pagelines">-->
+<!--                                <field name="evaluation_count" widget="statinfo" string="Evaluation"/>-->
+<!--                            </button>-->
+<!--                            <button class="oe_stat_button" type="object" name="count_prescriptions" icon="fa-list-alt">-->
+<!--                                     <field name="prescriptions_count" widget="statinfo" string="Prescription"/>-->
+<!--                            </button>-->
+<!--                            <button class="oe_stat_button" type="object" string="Lab Test" name="btn_view_labtest"-->
+<!--                                    icon="fa-flask"/>-->
+<!--                            <button class="oe_stat_button" type="object" string="Ward Info" name="btn_view_ward_info"-->
+<!--                                    icon="fa-bed"/>-->
+<!--                        </div>-->
+<!--                    </xpath>-->
+                    <div class="oe_inline position-relative">
+                        <newline/>
+                        <separator string="Patient Profile"/>
+                        <h3>
+                            <field name="patient_id" readonly="1"/>
+                        </h3>
+                        <br/>
+
+                        <div>
+                            <field name="photo" widget="image" class="oe_avatar oe_right"
+                                   style="max-width:100px;max-height:117px;"/>
+                        </div>
+                        <br/>
+                        <div class="oe_title">
+                            <h3>
+                                <label for="name" string="Name" class="oe_edit_only oe_center"
+                                       style="margin-left:20px;"/>
+                            </h3>
+                            <h2>
+                                <field name="name" placeholder="Full Name" required="1"
+                                       style="margin-left:17px; color:green;font-weight:normal;"/>
+                            </h2>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+
+                    <group>
+                        <group>
+                            <field name="mobile" widget="phone"/>
+                            <field name="email" widget="email"/>
+                            <field name="age_manual"/>
+
+<!--                            <field name="age"/>-->
+                            <field name="date_of_birth"/>
+                        </group>
+                        <group>
+                            <field name="gender"/>
+                            <field name="family_physician"/>
+                            <field name="blood_group"/>
+                            <field name="rh"/>
+                        </group>
+                        <group>
+                            <field name="address"/>
+                            <field name="marital_status" attrs="{'invisible': [('age_manual','&lt;=','18')]}"/>
+                            <field name="parent_name" attrs="{'invisible': [('marital_status','!=','single')],
+                                                                'required': [('marital_status','=','single')],
+                                                                'invisible': [('age_manual','&gt;=','18')]}"/>
+                            <field name="partner_name" attrs="{'invisible': [('marital_status','!=','married')],
+                                                                'required': [('marital_status','=','married')]}"/>
+                        </group>
+                        <group>
+                            <field name="barcode"/>
+                             <field name="is_company"/>
+                            <field name="state"/>
+                            <field name="user_id"/>
+<!--                            <field name="patient_create_date"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="General Information">
+                            <group colspan="4"
+                                   string="Patient Extra Information">
+                                <field colspan="4" name="general_info"
+                                       nolabel="1"/>
+                                <newline/>
+                                <group string="Patient Death Information">
+                                    <field name="deceased"/>
+                                    <field name="date_of_death"
+                                           attrs="{'invisible':[('deceased','=',False)],'required':[('deceased','=',1)]}"/>
+                                    <field name="cause_of_death"
+                                           attrs="{'invisible':[('deceased','=',False)]}"/>
+                                </group>
+                                <group string="Extra Information">
+                                    <div class="o_address_format">
+                                        <field name="street" placeholder="Street......" class="o_address_street"/>
+                                        <field name="street2" placeholder="Street 2......" class="o_address_street"/>
+                                        <field name="city" placeholder="City...." class="o_address_city"/>
+                                        <field name="state_id" class="o_address_state" placeholder="State.." options="{&quot;no_open&quot;: True}"/>
+                                        <field name="zip_code" placeholder="ZIP...." class="o_address_zip"/>
+                                        <field name="country_id" placeholder="Country" class="o_address_country"/>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Diseases">
+<!--                            <field name="patient_disease_ids" nolabel="1" widget="section_and_note_one2many"/>-->
+                        </page>
+                        <page string="Socioeconomics">
+                            <notebook>
+                                <page string="Main">
+                                    <group string="General">
+                                        <group>
+                                            <field name="ses" />
+                                            <field name="education" />
+                                            <field name="housing" />
+                                        </group>
+                                        <group>
+                                            <field name="works_at_home" />
+                                            <field name="hours_outside" />
+                                            <field name="hostile_area" />
+                                        </group>
+                                    </group>
+                                    <group string="Infrastructure">
+                                        <group>
+                                            <field name="sewers" />
+                                            <field name="water" />
+                                            <field name="trash" />
+                                            <field name="electricity" />
+                                        </group>
+                                        <group>
+                                            <field name="gas" />
+                                            <field name="telephone" />
+                                            <field name="television" />
+                                            <field name="internet" />
+                                        </group>
+                                    </group>
+                                    <group string="Extra Info">
+                                        <field name="ses_notes"
+                                            nolabel="1" colspan = "2"/>
+                                    </group>
+                                </page>
+                                <page string="Family">
+                                    <group string="Family APGAR">
+                                        <group>
+                                            <field name="fam_apgar_help" />
+                                            <field
+                                                name="fam_apgar_discussion" />
+                                            <field
+                                                name="fam_apgar_decisions" />
+                                        </group>
+                                        <group>
+                                            <field
+                                                name="fam_apgar_timesharing" />
+                                            <field
+                                                name="fam_apgar_affection" />
+                                        </group>
+                                    </group>
+                                    <group string="Other Family Issues">
+                                        <group>
+                                            <field name="single_parent" />
+                                            <field
+                                                name="domestic_violence" />
+                                            <field
+                                                name="working_children" />
+                                            <field
+                                                name="teenage_pregnancy" />
+                                            <field name="sexual_abuse" />
+                                        </group>
+                                        <group>
+                                            <field name="drug_addiction" />
+                                            <field
+                                                name="school_withdrawal" />
+                                            <field name="prison_past" />
+                                            <field name="prison_current" />
+                                            <field
+                                                name="relative_in_prison" />
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Gyneco / Obs"
+                                attrs="{'invisible':[('gender','=','male')]}">
+                                <group string="Gyneco">
+                                    <group string="General">
+                                        <field name="fertile" />
+                                        <field name="currently_pregnant" />
+                                        <field name="menarche" />
+                                        <field name="menopausal" />
+                                        <field name="menopause" />
+                                    </group>
+                                    <group string="Prevention and Screening">
+                                        <field name="breast_self_examination" />
+                                        <newline />
+                                        <field name="mammography" />
+                                        <field name="mammography_last" />
+                                        <field name="pap_test" />
+                                        <field name="pap_test_last" />
+                                        <field name="colposcopy" />
+                                        <field name="colposcopy_last" />
+                                    </group>
+                                </group>
+                                <group string="Obstetrics">
+                                    <group>
+                                        <field name="gpa" />
+                                        <field name="full_term" />
+                                        <field name="deaths_1st_week" />
+                                        <field name="deaths_2nd_week" />
+                                    </group>
+                                    <group>
+                                        <field name="gravida" />
+                                        <field name="born_alive" />
+                                        <field name="premature" />
+                                        <field name="abortions" />
+                                    </group>
+                                </group>
+<!--                                <notebook>-->
+<!--                                    <page string="Perinatal">-->
+<!--                                            <field name="perinatal_ids"-->
+<!--                                            nolabel="1" widget="section_and_note_one2many" />-->
+<!--                                     </page>-->
+<!--                                </notebook>-->
+                            </page>
+                            </notebook>
+                        </page>
+                        <page string="Lifestyle">
+                            <notebook>
+                                <page string="Diet and Excersice">
+                                    <group>
+                                        <group string="Physical Excersise">
+                                            <field name="excercise" />
+                                            <field
+                                                name="excercise_minutes_day" />
+                                        </group>
+                                        <group string="Sleep">
+                                            <field name="sleep_hours" />
+                                            <field
+                                                name="sleep_during_daytime" />
+                                        </group>
+                                    </group>
+                                    <group string="Diet info">
+                                        <group>
+                                            <field name="number_of_meals" />
+                                            <field name="eats_alone" />
+                                            <field name="coffee" />
+                                            <field name="coffee_cups" />
+                                        </group>
+                                        <group>
+                                            <field name="soft_drinks" />
+                                            <field name="salt" />
+                                            <field name="diet" />
+                                            <field name="diet_info" />
+                                        </group>
+                                    </group>
+                                    <group string="Lifestyle Information">
+                                        <field name="lifestyle_info"
+                                            nolabel="1" colspan="2"/>
+                                    </group>
+                                </page>
+                                <page string="Addictions">
+                                    <notebook>
+                                        <page string="Main">
+                                            <group>
+                                                <group>
+                                                    <field
+                                                        name="smoking" />
+                                                    <field
+                                                        name="smoking_number" />
+                                                    <field
+                                                        name="ex_smoker" />
+                                                    <field
+                                                        name="second_hand_smoker" />
+                                                    <field
+                                                        name="age_start_smoking" />
+                                                    <field
+                                                        name="age_quit_smoking" />
+                                                    <field
+                                                        name="alcohol" />
+                                                    <field
+                                                        name="ex_alcoholic" />
+                                                    <field
+                                                        name="age_start_drinking" />
+                                                </group>
+                                                <group>
+                                                    <field
+                                                        name="age_quit_drinking" />
+                                                    <field
+                                                        name="alcohol_beer_number" />
+                                                    <field
+                                                        name="alcohol_wine_number" />
+                                                    <field
+                                                        name="alcohol_liquor_number" />
+                                                    <field
+                                                        name="drug_usage" />
+                                                    <field
+                                                        name="drug_iv" />
+                                                    <field
+                                                        name="ex_drug_addict" />
+                                                    <field
+                                                        name="age_start_drugs" />
+                                                    <field
+                                                        name="age_quit_drugs" />
+                                                </group>
+                                            </group>
+                                        </page>
+                                  </notebook>
+                                </page>
+
+                                <page string="Sexuality">
+                                    <group>
+                                        <group>
+                                            <field
+                                                name="sexual_preferences" />
+                                            <field
+                                                name="sexual_partners_number" />
+                                            <field
+                                                name="sexual_practices" />
+                                        </group>
+                                        <group>
+                                            <field name="sexual_partners" />
+                                            <field
+                                                name="first_sexual_encounter" />
+                                            <field name="anticonceptive" />
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <group
+                                            string="Other sexual practices">
+                                            <field name="sex_oral" />
+                                            <field name="sex_anal" />
+                                        </group>
+                                        <group string="Prostitution">
+                                            <field name="prostitute" />
+                                            <field
+                                                name="sex_with_prostitutes" />
+                                        </group>
+                                    </group>
+                                    <group
+                                        string="Extra info about the patient sexuality">
+                                        <field nolabel="1"
+                                            name="sexuality_info" colspan = "2"/>
+                                    </group>
+                                </page>
+
+                                <page string="Safety">
+                                    <group string="Drive and Home Safety">
+                                        <group>
+                                            <field
+                                                name="motorcycle_rider" />
+                                            <field name="helmet" />
+                                            <field name="traffic_laws" />
+                                            <field name="car_revision" />
+                                        </group>
+                                        <group>
+                                            <field name="car_seat_belt" />
+                                            <field
+                                                name="car_child_safety" />
+                                            <field name="home_safety" />
+                                        </group>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </page>
+                        <page string="Medication">
+<!--                                <field name="medication_ids" widget="section_and_note_one2many" >-->
+<!--                                    <tree>-->
+<!--                                        <field name="medical_medicament_id" />-->
+<!--                                        <field name="indication_pathology_id" />-->
+<!--                                        <field name="start_treatment" />-->
+<!--                                        <field name="end_treatment" />-->
+<!--                                        <field name="is_active" />-->
+<!--                                        <field name="doctor_physician_id" />-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+                            </page>
+                            <page string="Vaccinations">
+<!--                                <field name="medical_vaccination_ids"-->
+<!--                                    nolabel="1">-->
+<!--                                    <tree>-->
+<!--                                        <field name="vaccine_product_id" />-->
+<!--                                        <field name="dose" />-->
+<!--                                        <field name="date" />-->
+<!--                                        <field name="observations" />-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+                            </page>
+                        <page string="Bill Register">
+                            <!--                            <field name="bill_info">-->
+                            <!--                                <group>-->
+                            <!--                                    <field name="total"/>-->
+                            <!--                                </group>-->
+                            <!--                            </field>-->
+                        </page>
+                        <page string="Appointments">
+                            <!--                            <field name="appointment_info">-->
+                            <!--                                <group>-->
+                            <!--                                    <field name="total"/>-->
+                            <!--                                </group>-->
+                            <!--                            </field>-->
+                        </page>
+                        <page string="Admission Details">
+                            <!--                            <field name="admission_info">-->
+                            <!--                                <group>-->
+                            <!--                                    <field name="total"/>-->
+                            <!--                                </group>-->
+                            <!--                            </field>-->
+                        </page>
+                        <page string="Evaluations">
+                            <!--                            <field name="patient_line_id" mode="tree">-->
+                            <!--                                <tree string="Select Admission Item" editable="top">-->
+                            <!--                                    <field name="item_name"/>-->
+                            <!--                                    <field name="department"/>-->
+                            <!--                                    <field name="price"/>-->
+                            <!--                                    <field name="total_amount"/>-->
+                            <!--                                </tree>-->
+                            <!--                            </field>-->
+                        </page>
+                    </notebook>
+<!--                    <group>-->
+<!--                        <group>-->
+<!--                            <field name="total"/>-->
+<!--                            <field name="grand_total"/>-->
+<!--                            <field name="paid_amount"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+                </sheet>
+                <!--                chatter-->
+                <!--                <div class="o_attachment_preview"/>-->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="patient_kanban_view" model="ir.ui.view">
+        <field name="name">Patent.Kanban.View</field>
+        <field name="model">patient.info</field>
+        <field name="arch" type="xml">
+            <kanban string="Patient Kanban View" class="o_res_partner_kanban">
+                <field name="id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click" style="height:135;background-color:#F2F3F4;color:#2E86C1;">
+                            <div style="width:30%;float:left;display:inline-block;">
+                                <img alt="Avatar" t-att-src="kanban_image('patient.info','photo',record.id.raw_value)"
+                                     style="width:100px;height:100px;"/>
+                            </div>
+                            <div style="width:70%;float:right;display:inline-block;">
+                                <ul style="list-style-type:none;">
+                                    <li>
+                                        <b>Name:</b>
+                                        <field name="name"/>
+                                    </li>
+                                    <li>
+                                        <b>Patient Id:</b>
+                                        <field name="patient_id"/>
+                                    </li>
+                                    <li>
+                                        <b>Age:</b>
+                                        <field name="age"/>
+                                    </li>
+                                    <li>
+                                        <b>Mobile No:</b>
+                                        <field name="mobile"/>
+                                    </li>
+                                    <li>
+                                        <b>Address:</b>
+                                        <field name="address"/>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--                                Phone: <field name="mobile" widget="phone"/><br/>-->
+                            <!--                                Address: <field name="address"/>-->
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+<!--    Search View of the patient-->
+    <record id="patient_activity_view_search" model="ir.ui.view">
+        <field name="name">patient.info.view.search</field>
+        <field name="model">patient.info</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="patient_id"/>
+                <field name="mobile"/>
+                <filter name="state" string="Status" domain="[('state', '=', 'created')]"/>
+                <searchpanel>
+                    <field name="gender" string="Gender" enable_counters="1"/>
+                    <field name="state" string="Patient Status" enable_counters="1" select="multi"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="patient_action_window">
+        <field name="name">Patient</field>
+        <field name="res_model">patient.info</field>
+        <field name="view_mode">tree,form,kanban,search</field>
+    </record>
+
+    <menuitem name="Kolpolok Hospital" id="hospital_menu_root" web_icon="/static/description/icon.png"/>
+    <menuitem name="Profile" id="profile_menu" parent="hospital_menu_root" sequence="0"/>
+    <menuitem name="Patient info" id="patient_info" parent="profile_menu"
+              action="patient_action_window"/>
+</odoo>

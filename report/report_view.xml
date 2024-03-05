@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+     <report id="patient_identity_card"
+            string="Patient Card"
+            model="patient.info"
+            report_type="qweb-pdf"
+            file="kolpolok_hms.patient_card_template"
+            name="kolpolok_hms.patient_card_template"/>
+
+<!--    <report id="action_appointment_print_id"-->
+<!--            string="Appointment Print"-->
+<!--            model="appointment.booking"-->
+<!--            report_type="qweb-pdf"-->
+<!--            file="kolpolok_hms.appointment_form_view"-->
+<!--            name="kolpolok_hms.appointment_form_view"/>-->
+
+
+<!--    <report id="report_admission_action_form"-->
+<!--            string="Admission"-->
+<!--            model="admission.info"-->
+<!--            report_type="qweb-pdf"-->
+<!--            file="kolpolok_hms.admission_form"-->
+<!--            name="kolpolok_hms.admission_form"/>-->
+
+
+<!--    <report id="details_report_admission_action"-->
+<!--            string="Details Admission Report"-->
+<!--            model="admission.info.wizard"-->
+<!--            report_type="qweb-pdf"-->
+<!--            file="kolpolok_hms.details_admission_report"-->
+<!--            name="kolpolok_hms.details_admission_report"/>-->
+
+<!--    <record id="appointment_details_print_report_action" model="ir.actions.report">-->
+<!--        <field name="name">Patient Appointment Report</field>-->
+<!--        <field name="model">appointment.report.wizard</field>-->
+<!--        <field name="report_type">qweb-pdf</field>-->
+<!--        <field name="report_name">kolpolok_hms.details_appointment_report_template_id</field>-->
+<!--        <field name="report_file">kolpolok_hms.details_appointment_report_template_id</field>-->
+<!--        <field name="binding_model_id" ref="model_appointment_report_wizard"/>-->
+<!--        <field name="binding_type">report</field>-->
+<!--    </record>-->
+    <record id="patient_details_report_action" model="ir.actions.report">
+        <field name="name">Patient Details Report</field>
+        <field name="model">patient.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">kolpolok_hms.patient_details_report_template</field>
+        <field name="report_file">kolpolok_hms.patient_details_report_template</field>
+        <field name="binding_model_id" ref="model_patient_report_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+
+
+</odoo>
